@@ -15,7 +15,7 @@ do
     p=`./dreyfus-wagner < "testcases/$x"`
     end=$(date +%s%N)
     input_file="testcases/$x"
-    output_file="output3.csv"
+    output_file="output_dreyfus.csv"
     echo -n "$c," >> "$output_file"
     awk 'NR==2 {printf "%s,", $2} NR==3 {printf "%s,", $2} /Terminals / {printf "%s,", $2}' "$input_file" >> "$output_file"
     echo "$(($(($end-$start))/1000000)) ms" >> "$output_file"

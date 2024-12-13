@@ -21,7 +21,7 @@ do
 
     # Extract the corresponding opt value from track1.csv
     testcase_name=$(basename "$x")  # Get the test case file name
-    opt=$(awk -F, -v t="$testcase_name" '$1 ~ t {gsub(/[[:space:]]/, "", $2); print $2}' track1.csv)
+    opt=$(awk -F, -v t="$testcase_name" '$1 ~ t {gsub(/[[:space:]]/, "", $2); print $2}' ground_truth/track1.csv)
 
     # Calculate the approximation ratio
     if [ -n "$opt" ] && [ "$opt" -ne 0 ]; then

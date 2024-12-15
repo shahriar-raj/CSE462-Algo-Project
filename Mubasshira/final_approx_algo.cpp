@@ -8,6 +8,8 @@
 #include <string>
 #include <sstream>
 #include <unordered_set>
+#include <chrono>
+// #include <sys/resource.h>
 
 using namespace std;
 
@@ -317,6 +319,7 @@ bool local_search_improved(map<pair<int, int>, int> &W_map, const vector<int> &t
             for (const auto &ed : candidate_edges)
             {
                 new_solution.emplace(ed);
+                new_solution = prune(new_solution, terminals, graph);
             }
 
             // Check if terminals remain connected
@@ -341,6 +344,38 @@ bool local_search_improved(map<pair<int, int>, int> &W_map, const vector<int> &t
     }
 
     return false; // No improvement found
+}
+
+// Prune the solution by removing redundant edges
+set<pair<int, int>> prune(const set<pair<int, int>> &edges, const vector<int> &terminals, const Graph &graph)
+{
+    set<pair<int, int>> pruned_edges = edges;
+    for (const auto &ed : edges)
+    {
+        int u = ed.first, v = ed.second;
+        if (is_terminal[u] && is_terminal[v])
+            continue; // Skip terminal-terminal edges
+
+        // Check if edge can be removed
+        set<pair<int, int>> test_edges = edges;
+        test_edges.erase(ed);
+
+        if (terminalsConnected(test_edges, terminals))
+        {
+            // Check if edge is redundant
+            vector<int> prev = dijkstraShortestPath(graph, u);
+            if (prev[v] == -1)
+            {
+                prev = dijkstraShortestPath(graph, v);
+                if (prev[u] == -1)
+                {
+                    // Both u-v and v-u paths are disconnected
+                    pruned_edges.erase(ed);
+                }
+            }
+        }
+    }
+    return pruned_edges;
 }
 
 // Parse the Graph section from input
@@ -407,10 +442,16 @@ void outputResults(const map<pair<int, int>, int> &W_map)
     cout << "END" << endl;
 }
 
+// void printMemoryUsage() {
+//     struct rusage usage;
+//     getrusage(RUSAGE_SELF, &usage);
+//     cout << "Memory usage: " << usage.ru_maxrss << " KB" << std::endl;
+// }
 
 
 int main()
 {
+    auto start = chrono::high_resolution_clock::now();
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
@@ -520,6 +561,10 @@ int main()
     }
 
     outputResults(W);
+    // printMemoryUsage();
+    auto end = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::milliseconds>(end - start);
+    cout << "Time taken: " << duration.count() << " milliseconds" << endl;
 
     return 0;
 }

@@ -37,6 +37,3 @@ The project implements two algorithms:
    ```bash
    g++ -o minpath minpath.cpp
    ./minpath <input_file>
-
- 
-

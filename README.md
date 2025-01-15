@@ -26,3 +26,17 @@ The project implements two algorithms:
    git clone https://github.com/shahriar-raj/CSE462-Algo-Project.git
    cd CSE462-Algo-Project
 
+2. **For the Dreyfus-Wagner Algorithm**:
+   Navigate to the dreyfus-wagner/ directory and execute the algorithm:
+   ```bash
+   g++ -o dreyfus-wagner dreyfus-wagner.cpp
+   ./dreyfus-wagner <input_file>
+
+3. **For the Approximation Algorithm**:
+   Navigate to the minpath/ directory and execute the algorithm:
+   ```bash
+   g++ -o minpath minpath.cpp
+   ./minpath <input_file>
+
+ 
+
